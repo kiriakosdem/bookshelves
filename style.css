@@ -46,9 +46,14 @@ background-size: contain;
 	border-width: 1px;
 	border-color: midnightblue;
 	font-weight: bold;
-	font-family:monospace;
-	padding: 10px;
+	/*font-family:monospace;*/
+	padding: 5px;
+	padding-bottom: 10px;
+	padding-top: 10px;
 	margin: 0;
+	position: absolute;
+	top:90%; 
+	left:0%;
 }
 
 .mybutton:hover{
@@ -59,4 +64,13 @@ background-size: contain;
 
 .mybutton:active{
 	background-color: darkblue;
+}
+
+label{
+	padding: 2px;
+	padding-left: 5px;
+	padding-right: 5px;
+	color:white;
+	background: rgba(0, 0, 0, 0.2);
+	border-radius: 10px;
 }
