@@ -359,7 +359,7 @@ function drawShelves(){
 	fill(200,200,200);
 	translate(PianoWallWidth/2-RightShelfWidth/2,-RightBottomShelfHeight,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(RightShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	box(RightShelfWidth-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
 	pop();
 	
 	//right middle shelf
@@ -367,7 +367,7 @@ function drawShelves(){
 	fill(200,200,200);
 	translate(PianoWallWidth/2-RightShelfWidth/2,-RightMiddleShelfHeight,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(RightShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	box(RightShelfWidth-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
 	pop();
 	
 	//right top shelf
@@ -375,7 +375,7 @@ function drawShelves(){
 	fill(200,200,200);
 	translate(PianoWallWidth/2-RightShelfWidth/2,-RightTopShelfHeight,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(RightShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	box(RightShelfWidth-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
 	pop();
 	
 	//right topest shelf
@@ -383,7 +383,7 @@ function drawShelves(){
 	fill(200,200,200);
 	translate(PianoWallWidth/2-RightShelfWidth/2,-RightTopestShelfHeight,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(RightShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	box(RightShelfWidth-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
 	pop();
 	
 	//top shelf
@@ -391,7 +391,7 @@ function drawShelves(){
 	fill(200,200,200);
 	translate(0,-TopShelfHeight, ShelfLength/2+1);
 	rotateX(PI/2);
-	box(TopShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	box(TopShelfWidth-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
 	pop();
 	
 	//ceiling shelf
@@ -399,6 +399,6 @@ function drawShelves(){
 	fill(200,200,200);
 	translate(0,-CeilingShelfHeight, ShelfLength/2+1);
 	rotateX(PI/2);
-	box(TopShelfWidth*0.6-PianoShelfMargin,ShelfLength,ShelfThickness);
+	box(TopShelfWidth*0.6-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
 	pop();
 }
