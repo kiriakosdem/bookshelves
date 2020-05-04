@@ -309,7 +309,7 @@ function drawShelves(){
 	//right middle shelf
 	push();
 	fill(200,200,200);
-	translate(PianoWallWidth/2-RightMiddleShelfWidth/2,140,ShelfLength/2+1);
+	translate(PianoWallWidth/2-RightMiddleShelfWidth/2,-2*140,ShelfLength/2+1);
 	rotateX(PI/2);
 	box(RightMiddleShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
 	pop();
@@ -317,7 +317,7 @@ function drawShelves(){
 	//right bottom shelf
 	push();
 	fill(200,200,200);
-	translate(PianoWallWidth/2-RightMiddleShelfWidth/2,80,ShelfLength/2+1);
+	translate(PianoWallWidth/2-RightMiddleShelfWidth/2,-2*80,ShelfLength/2+1);
 	rotateX(PI/2);
 	box(RightMiddleShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
 	pop();
