@@ -19,18 +19,19 @@ let labelCamera3;
 let LoungeRoomHeight = sizeScaling*307.5;
 let OfficeFloorHeight = sizeScaling*10;
 let HumanHeight = sizeScaling*169;
+let ColumnThickness = sizeScaling*30;
 
 //corridors and floors
 let ShoeCorridorWidth = sizeScaling*86;
 let ShoeCorridorLength = sizeScaling*107;
 let StepCorridorWidth = sizeScaling*176;
 let StepCorridorLength = sizeScaling*20;
-let LoungeFloorWidth = sizeScaling*640;
+let LoungeFloorWidth = sizeScaling*588;
 let LoungeFloorLength = sizeScaling*354;
 let OfficeFloorLength = sizeScaling*456;
 
 //walls
-let PianoWallWidth = LoungeFloorWidth-ShoeCorridorWidth-StepCorridorWidth;
+let PianoWallWidth = LoungeFloorWidth-ShoeCorridorWidth-StepCorridorWidth; //326cm
 let PaintingWallWidth = LoungeFloorLength+StepCorridorLength;
 let ShoeWallWidth = LoungeFloorLength + ShoeCorridorLength;
 let PanelWallWidth = ShoeCorridorLength;
@@ -50,16 +51,23 @@ let PaintingHeight = sizeScaling*58;
 
 //BookShelf
 let ShelfThickness = sizeScaling*3;
-let ShelfLength = sizeScaling*35;
-let BottomBoxThickness = sizeScaling*20;
-let PianoShelfMargin = sizeScaling*10;
-
-let TvShelfWidth = sizeScaling*(92+20+20);
-let TvShelfHeight = sizeScaling*100;
-let RightMiddleShelfWidth = PianoWallWidth-TvShelfWidth-PianoWidth;
-let RightMiddleShelfHeight = sizeScaling*100;
+let ShelfLength = sizeScaling*37;
+let LeftShelfWidth = sizeScaling*(92+10+10); //112cm
+let RightShelfWidth = PianoWallWidth-LeftShelfWidth-PianoWidth; //69cm
 let TopShelfWidth = PianoWallWidth;
+
+let PianoShelfMargin = sizeScaling*8;
+
+let BottomBoxThickness = sizeScaling*25;
+
+let LeftBottomShelfHeight = sizeScaling*60;
+let LeftMiddleShelfHeight = sizeScaling*95;
+let RightBottomShelfHeight = sizeScaling*60;
+let RightMiddleShelfHeight = sizeScaling*95;
+let RightTopShelfHeight = sizeScaling*130;
+let RightTopestShelfHeight = sizeScaling*165;
 let TopShelfHeight = sizeScaling*200;
+let CeilingShelfHeight = sizeScaling*235;
 
 
 
@@ -69,6 +77,7 @@ function preload() {
 	textureFloor = loadImage('images/tiles.jpg');
 	textureWall = loadImage('images/wall.jpg');
 	texturePainting = loadImage('images/adam.jpg');
+	texturePlug = loadImage('images/cplug.jpg');
 }
 
 function setup() {
@@ -183,8 +192,8 @@ function drawCeiling(){
 	//lower ceiling
 	push();
 	texture(textureWall)
-	translate(-LoungeFloorWidth/2+PianoWallWidth/2+ShoeCorridorWidth,-ShoeCorridorLength/2,-30);
-	box(LoungeFloorWidth, ShoeCorridorLength, 60);
+	translate(-LoungeFloorWidth/2+PianoWallWidth/2+ShoeCorridorWidth,-ShoeCorridorLength/2,-ColumnThickness/2);
+	box(LoungeFloorWidth, ShoeCorridorLength, ColumnThickness);
 	pop();
 	
 	pop();
@@ -207,6 +216,10 @@ function drawWall(){
 	translate(PianoWallWidth/2+ShoeCorridorWidth,0,ShoeWallWidth/2-ShoeCorridorLength);
 	rotateY(PI/2);
 	plane(ShoeWallWidth,LoungeRoomHeight);
+	translate(0,0,-sizeScaling*9/2-1);
+	box(ColumnThickness,LoungeRoomHeight,sizeScaling*9-1);
+	translate(0,-LoungeRoomHeight/2+ColumnThickness/2,0);
+	box(ShoeWallWidth,ColumnThickness-1,sizeScaling*9)
 	pop();
 	
 	//panel wall
@@ -242,7 +255,7 @@ function drawObjects(){
 	//piano
 	push();
 	specularMaterial(10);
-	translate(-PianoWallWidth/2+TvShelfWidth+PianoWidth/2,-PianoHeight/2-1,PianoLength/2+2*8);
+	translate(-PianoWallWidth/2+LeftShelfWidth+PianoWidth/2,-PianoHeight/2-1,PianoLength/2+2*8);
 	box(PianoWidth,PianoHeight,PianoLength);
 	rotateX(PI/2);
 	translate(0,PianoLength/2+KeyboardLength/2,0)
@@ -252,17 +265,43 @@ function drawObjects(){
 	//painting
 	push();
 	texture(texturePainting);
-	translate(-PianoWallWidth/2+TvShelfWidth+PianoWidth/2,-PianoHeight-PaintingHeight/2-1,PianoLength/2+2*8);
+	translate(-PianoWallWidth/2+LeftShelfWidth+PianoWidth/2,-PianoHeight-PaintingHeight/2-1,PianoLength/2+2*8);
 	rotateX(PI/16)
 	box(PaintingWidth,PaintingHeight,10);
+	pop();
+	
+	//plugs
+	push();
+	texture(texturePlug);
+	push();
+	translate(-PianoWallWidth/2+sizeScaling*90,-sizeScaling*50,sizeScaling*2);
+	box(sizeScaling*8,sizeScaling*8,sizeScaling*2);
+	translate(sizeScaling*10,0,0);
+	box(sizeScaling*8,sizeScaling*8,sizeScaling*2);
+	translate(sizeScaling*10,0,0);
+	box(sizeScaling*8,sizeScaling*8,sizeScaling*2);
+	translate(sizeScaling*10,0,0);
+	box(sizeScaling*8,sizeScaling*8,sizeScaling*2);
+	pop();
+	translate(PianoWallWidth/2-sizeScaling*72,-sizeScaling*50,sizeScaling*2);
+	box(sizeScaling*8,sizeScaling*8,sizeScaling*2);
+	translate(-sizeScaling*10,0,0);
+	box(sizeScaling*8,sizeScaling*8,sizeScaling*2);
 	pop();
 	
 	//tv
 	push();
 	specularMaterial(10);
-	translate(-PianoWallWidth/2+TvShelfWidth/2,-TvShelfHeight-TvHeight/2-20,ShelfLength/2+1);
+	translate(-PianoWallWidth/2+LeftShelfWidth/2,-LeftMiddleShelfHeight-TvHeight/2-20,ShelfLength/2+1);
 	rotateY(-PI/16);
 	box(TvWidth,TvHeight,TvLength);
+	pop();
+	
+	//speaker
+	push();
+	specularMaterial(10);
+	translate(PianoWallWidth/2-sizeScaling*45,-sizeScaling*265,40);
+	box(40,50,40);
 	pop();
 	
 	//human
@@ -282,52 +321,69 @@ function drawObjects(){
 }
 
 function drawShelves(){
-	//tv shelf
-	push();
-	fill(200,200,200);
-	translate(-PianoWallWidth/2+TvShelfWidth/2,-TvShelfHeight,ShelfLength/2+1);
-	rotateX(PI/2);
-	box(TvShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
-	pop();
-	
-	//ps3 shelf
-	push();
-	fill(200,200,200);
-	translate(-PianoWallWidth/2+TvShelfWidth/2,-PianoHeight/2,ShelfLength/2+1);
-	rotateX(PI/2);
-	box(TvShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
-	pop();
-	
-	//ps3 bottom box
+	//left bottom box
 	push();
 	fill(165,126,110);
-	translate(-PianoWallWidth/2+TvShelfWidth/2,-BottomBoxThickness/2,ShelfLength/2+1);
+	translate(-PianoWallWidth/2+LeftShelfWidth/2,-BottomBoxThickness/2,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(TvShelfWidth-PianoShelfMargin, ShelfLength, BottomBoxThickness);
+	box(LeftShelfWidth-PianoShelfMargin, ShelfLength, BottomBoxThickness);
 	pop();
 	
-	//right middle shelf
+	//left bottom shelf
 	push();
 	fill(200,200,200);
-	translate(PianoWallWidth/2-RightMiddleShelfWidth/2,-2*140,ShelfLength/2+1);
+	translate(-PianoWallWidth/2+LeftShelfWidth/2,-LeftBottomShelfHeight,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(RightMiddleShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	box(LeftShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	pop();
+	
+	//left middle shelf
+	push();
+	fill(200,200,200);
+	translate(-PianoWallWidth/2+LeftShelfWidth/2,-LeftMiddleShelfHeight,ShelfLength/2+1);
+	rotateX(PI/2);
+	box(LeftShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	pop();
+
+	
+	//right bottom box
+	push();
+	fill(165,126,110);
+	translate(PianoWallWidth/2-RightShelfWidth/2,-BottomBoxThickness/2,ShelfLength/2+1);
+	rotateX(PI/2);
+	box(RightShelfWidth-PianoShelfMargin,ShelfLength,BottomBoxThickness);
 	pop();
 	
 	//right bottom shelf
 	push();
 	fill(200,200,200);
-	translate(PianoWallWidth/2-RightMiddleShelfWidth/2,-2*80,ShelfLength/2+1);
+	translate(PianoWallWidth/2-RightShelfWidth/2,-RightBottomShelfHeight,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(RightMiddleShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	box(RightShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
 	pop();
 	
-	//right bottom box
+	//right middle shelf
 	push();
-	fill(165,126,110);
-	translate(PianoWallWidth/2-RightMiddleShelfWidth/2,-BottomBoxThickness/2,ShelfLength/2+1);
+	fill(200,200,200);
+	translate(PianoWallWidth/2-RightShelfWidth/2,-RightMiddleShelfHeight,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(RightMiddleShelfWidth-PianoShelfMargin,ShelfLength,BottomBoxThickness);
+	box(RightShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	pop();
+	
+	//right top shelf
+	push();
+	fill(200,200,200);
+	translate(PianoWallWidth/2-RightShelfWidth/2,-RightTopShelfHeight,ShelfLength/2+1);
+	rotateX(PI/2);
+	box(RightShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	pop();
+	
+	//right topest shelf
+	push();
+	fill(200,200,200);
+	translate(PianoWallWidth/2-RightShelfWidth/2,-RightTopestShelfHeight,ShelfLength/2+1);
+	rotateX(PI/2);
+	box(RightShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
 	pop();
 	
 	//top shelf
@@ -336,5 +392,13 @@ function drawShelves(){
 	translate(0,-TopShelfHeight, ShelfLength/2+1);
 	rotateX(PI/2);
 	box(TopShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	pop();
+	
+	//ceiling shelf
+	push();
+	fill(200,200,200);
+	translate(0,-CeilingShelfHeight, ShelfLength/2+1);
+	rotateX(PI/2);
+	box(TopShelfWidth*0.6-PianoShelfMargin,ShelfLength,ShelfThickness);
 	pop();
 }
