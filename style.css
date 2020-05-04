@@ -39,6 +39,18 @@ background-size: contain;
   background-position: center;
 */
 
+.camerabutton{
+	position: absolute;
+	top:0%; 
+	left:25%;
+}
+
+.paintingbutton{
+	position: absolute;
+	top:0%; 
+	left:40%;
+}
+
 .mybutton{
 	color: midnightblue;
 	background-color: lightgray;
@@ -51,9 +63,7 @@ background-size: contain;
 	padding-bottom: 10px;
 	padding-top: 10px;
 	margin: 0;
-	position: absolute;
-	top:90%; 
-	left:0%;
+	
 }
 
 .mybutton:hover{

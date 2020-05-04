@@ -11,6 +11,8 @@ let strokelines = 0;
 //html elements
 let mycanvas;
 let buttonResetCam;
+let buttonTogglePainting;
+let painting = -1;
 let labelCamera1;
 let labelCamera2;
 let labelCamera3;
@@ -52,32 +54,43 @@ let PaintingHeight = sizeScaling*58;
 //BookShelf
 let ShelfThickness = sizeScaling*3;
 let ShelfLength = sizeScaling*37;
+let TopShelfLength = sizeScaling*25;
 let LeftShelfWidth = sizeScaling*(92+10+10); //112cm
 let RightShelfWidth = PianoWallWidth-LeftShelfWidth-PianoWidth; //69cm
-let TopShelfWidth = PianoWallWidth;
+
+let TopLeftShelfWidth = PianoWallWidth*0.55;
+let TopMiddleShelfWidth = PianoWallWidth*0.15;
+let TopRightShelfWidth = PianoWallWidth*0.3;
 
 let PianoShelfMargin = sizeScaling*8;
 
 let BottomBoxThickness = sizeScaling*25;
 
-let LeftBottomShelfHeight = sizeScaling*60;
-let LeftMiddleShelfHeight = sizeScaling*95;
-let RightBottomShelfHeight = sizeScaling*60;
-let RightMiddleShelfHeight = sizeScaling*95;
-let RightTopShelfHeight = sizeScaling*130;
-let RightTopestShelfHeight = sizeScaling*165;
-let TopShelfHeight = sizeScaling*200;
-let CeilingShelfHeight = sizeScaling*235;
+let LeftBottomestShelfHeight = sizeScaling*20;
+let LeftBottomShelfHeight = sizeScaling*20;
+let LeftMiddleShelfHeight = sizeScaling*70;
+let LeftTopShelfHeight = sizeScaling*95
+let RightBottomShelfHeight = sizeScaling*36;
+let RightMiddleShelfHeight = sizeScaling*71;
+let RightTopShelfHeight = sizeScaling*106;
+let RightTopestShelfHeight = sizeScaling*141;
+
+let TopLeftShelfHeight = sizeScaling*200;
+let TopMiddleShelfHeight = sizeScaling*185;
+let TopRightShelfHeight = sizeScaling*215;
 
 
 
 function preload() {
 	// Load model with normalise parameter set to true
 	human = loadModel('objects/human.obj', true);
+	sofa = loadModel('objects/sofa.obj', true);
 	textureFloor = loadImage('images/tiles.jpg');
 	textureWall = loadImage('images/wall.jpg');
 	texturePainting = loadImage('images/adam.jpg');
 	texturePlug = loadImage('images/cplug.jpg');
+	textureWood = loadImage('images/wood.jpg');
+	textureSofa = loadImage('images/sofaleaves.jpg');
 }
 
 function setup() {
@@ -86,12 +99,22 @@ function setup() {
 	mycanvas = createCanvas(animationwidth, animationheight, WEBGL);
 	mycanvas.parent("jscode");
 	
+	//painting buttom
+	buttonTogglePainting = createButton("Πίνακας on/off");
+	buttonTogglePainting.parent("jscode");
+	buttonTogglePainting.style('width', '150px');
+	buttonTogglePainting.style('margin','5px');
+	buttonTogglePainting.class('mybutton paintingbutton');
+	buttonTogglePainting.mousePressed(togglePainting);
+	
+	
+	
 	//camera
 	buttonResetCam = createButton("Επαναφορά Κάμερας");
 	buttonResetCam.parent("jscode");
 	buttonResetCam.style('width', '150px');
 	buttonResetCam.style('margin','5px');
-	buttonResetCam.class('mybutton');
+	buttonResetCam.class('mybutton camerabutton');
 	buttonResetCam.mousePressed(resetCamera);
 	
 	camera(0,-HumanHeight,2.3*(height/2.0)/tan(PI*30.0/180.0),  
@@ -133,12 +156,17 @@ function draw() {
 	drawWall();
 	drawObjects();
 	drawShelves();
+	drawMetalStrips();
 }
 
 function resetCamera(){
 	camera(0,-HumanHeight,2.3*(height/2.0)/tan(PI*30.0/180.0),  
 		   0,-HumanHeight,0,  
 		   0,1,0);
+}
+
+function togglePainting(){
+	painting *= -1;
 }
 
 function drawFloor(){
@@ -177,7 +205,7 @@ function drawFloor(){
 function drawCeiling(){
 	push();
 	//texture(textureWall);
-	fill(255,255,250);
+	fill(255,255,255);
 	strokeWeight(strokelines);
 	rotateX(PI/2)
 	translate(0,0,LoungeRoomHeight)
@@ -185,13 +213,16 @@ function drawCeiling(){
 	
 	//lounge ceiling
 	push();
+	fill(255,255,255);
 	translate(-LoungeFloorWidth/2+PianoWallWidth/2+ShoeCorridorWidth,LoungeFloorLength/2,0);
-	//plane(LoungeFloorWidth, LoungeFloorLength);
+	plane(LoungeFloorWidth, LoungeFloorLength);
 	pop();
 	
 	//lower ceiling
 	push();
-	texture(textureWall)
+	//texture(textureWall)
+	fill(235,228,196);
+	fill(237,235,200);
 	translate(-LoungeFloorWidth/2+PianoWallWidth/2+ShoeCorridorWidth,-ShoeCorridorLength/2,-ColumnThickness/2);
 	box(LoungeFloorWidth, ShoeCorridorLength, ColumnThickness);
 	pop();
@@ -201,7 +232,8 @@ function drawCeiling(){
 
 function drawWall(){
 	push();
-	texture(textureWall);
+	//texture(textureWall);
+	fill(237,235,200);
 	strokeWeight(strokelines);
 	
 	//piano wall
@@ -262,13 +294,16 @@ function drawObjects(){
 	box(PianoWidth,KeyboardLength,KeyboardHeight);
 	pop();
 	
-	//painting
+	if (painting==1){
+		//painting
 	push();
 	texture(texturePainting);
 	translate(-PianoWallWidth/2+LeftShelfWidth+PianoWidth/2,-PianoHeight-PaintingHeight/2-1,PianoLength/2+2*8);
 	rotateX(PI/16)
 	box(PaintingWidth,PaintingHeight,10);
 	pop();
+	}
+	
 	
 	//plugs
 	push();
@@ -292,7 +327,7 @@ function drawObjects(){
 	//tv
 	push();
 	specularMaterial(10);
-	translate(-PianoWallWidth/2+LeftShelfWidth/2,-LeftMiddleShelfHeight-TvHeight/2-20,ShelfLength/2+1);
+	translate(-PianoWallWidth/2+LeftShelfWidth/2,-LeftTopShelfHeight-TvHeight/2-20,ShelfLength/2+1);
 	rotateY(-PI/16);
 	box(TvWidth,TvHeight,TvLength);
 	pop();
@@ -307,98 +342,237 @@ function drawObjects(){
 	//human
 	push();
 	normalMaterial();
+	texture(textureSofa);
 	fill(255,195,170);
-	
+	fill(255,255,255);
 	translate(0,-HumanHeight/2,0);
 	rotateZ(PI);
 	scale(HumanHeight/100/2);
-	translate(310,0,40);
-	
+	translate(265,0,40);
 	model(human);
+	pop();
+	
+	//sofa small
+	push();
+	noStroke();
+	texture(textureSofa);
+	rotateZ(PI);
+	translate(PianoWallWidth/2+StepCorridorWidth,0,LoungeFloorLength/2)
+	rotateY(-PI/2);
+	scale(2);
+	scale(0.9,1.052,0.952);
+	translate(0,80/2,80/2+5);
+	model(sofa);
+	pop();
+	
+	//sofa big
+	push();
+	noStroke();
+	texture(textureSofa);
+	rotateZ(PI);
+	translate(0,0,LoungeFloorLength)
+	scale(2);
+	scale(1.1,1.052,0.952);
+	rotateY(PI);
+	translate(-100,80/2,80/2);
+	model(sofa);
 	pop();
 	
 	pop();
 }
 
 function drawShelves(){
-	//left bottom box
-	push();
-	fill(165,126,110);
-	translate(-PianoWallWidth/2+LeftShelfWidth/2,-BottomBoxThickness/2,ShelfLength/2+1);
-	rotateX(PI/2);
-	box(LeftShelfWidth-PianoShelfMargin, ShelfLength, BottomBoxThickness);
-	pop();
+	texture(textureWood);
+	
+//	//left bottom box
+//	push();
+//	translate(-PianoWallWidth/2+LeftShelfWidth/2,-BottomBoxThickness/2,ShelfLength/2+1);
+//	rotateX(PI/2);
+//	translate(0,0,20);
+//	box(LeftShelfWidth-PianoShelfMargin, ShelfLength, BottomBoxThickness);
+//	pop();
+//	
+//	//left bottom box legs
+//	push();
+//	translate(-PianoWallWidth/2+PianoShelfMargin,-10,ShelfLength-3);
+//	rotateX(PI/2);
+//	rotateY(PI/16);
+//	box(6, 6, 20);
+//	pop();
+//	
+//	push();
+//	translate(-PianoWallWidth/2+LeftShelfWidth-PianoShelfMargin,-10,ShelfLength-3);
+//	rotateX(PI/2);
+//	rotateY(-PI/16);
+//	box(6, 6, 20);
+//	pop();
+//	
+//	push();
+//	translate(-PianoWallWidth/2+PianoShelfMargin,-10,3);
+//	rotateX(PI/2);
+//	rotateY(PI/16);
+//	box(6, 6, 20);
+//	pop();
+//	
+//	push();
+//	translate(-PianoWallWidth/2+LeftShelfWidth-PianoShelfMargin,-10,3);
+//	rotateX(PI/2);
+//	rotateY(-PI/16);
+//	box(6, 6, 20);
+//	pop();
+
+	
 	
 	//left bottom shelf
 	push();
-	fill(200,200,200);
 	translate(-PianoWallWidth/2+LeftShelfWidth/2,-LeftBottomShelfHeight,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(LeftShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	box(LeftShelfWidth-2*PianoShelfMargin,ShelfLength,ShelfThickness);
 	pop();
 	
 	//left middle shelf
 	push();
-	fill(200,200,200);
 	translate(-PianoWallWidth/2+LeftShelfWidth/2,-LeftMiddleShelfHeight,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(LeftShelfWidth-PianoShelfMargin,ShelfLength,ShelfThickness);
+	box(LeftShelfWidth-2*PianoShelfMargin,ShelfLength,ShelfThickness);
+	pop();
+	
+	//left top shelf
+	push();
+	translate(-PianoWallWidth/2+LeftShelfWidth/2,-LeftTopShelfHeight,ShelfLength/2+1);
+	rotateX(PI/2);
+	box(LeftShelfWidth-2*PianoShelfMargin,ShelfLength,ShelfThickness);
 	pop();
 
 	
-	//right bottom box
-	push();
-	fill(165,126,110);
-	translate(PianoWallWidth/2-RightShelfWidth/2,-BottomBoxThickness/2,ShelfLength/2+1);
-	rotateX(PI/2);
-	box(RightShelfWidth-PianoShelfMargin,ShelfLength,BottomBoxThickness);
-	pop();
+//	//right bottom box
+//	push();
+//	fill(165,126,110);
+//	translate(PianoWallWidth/2-RightShelfWidth/2,-BottomBoxThickness/2,ShelfLength/2+1);
+//	rotateX(PI/2);
+//	box(RightShelfWidth-PianoShelfMargin,ShelfLength,BottomBoxThickness);
+//	pop();
+	
+	
 	
 	//right bottom shelf
 	push();
-	fill(200,200,200);
 	translate(PianoWallWidth/2-RightShelfWidth/2,-RightBottomShelfHeight,ShelfLength/2+1);
 	rotateX(PI/2);
-	box(RightShelfWidth-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
+	box(RightShelfWidth-2*PianoShelfMargin,ShelfLength,ShelfThickness);
 	pop();
 	
 	//right middle shelf
 	push();
-	fill(200,200,200);
-	translate(PianoWallWidth/2-RightShelfWidth/2,-RightMiddleShelfHeight,ShelfLength/2+1);
+	translate(PianoWallWidth/2-RightShelfWidth/2,-RightMiddleShelfHeight,ShelfLength*0.9/2+1);
 	rotateX(PI/2);
-	box(RightShelfWidth-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
+	box(RightShelfWidth-2*PianoShelfMargin,ShelfLength*0.9,ShelfThickness);
 	pop();
 	
 	//right top shelf
 	push();
-	fill(200,200,200);
-	translate(PianoWallWidth/2-RightShelfWidth/2,-RightTopShelfHeight,ShelfLength/2+1);
+	translate(PianoWallWidth/2-RightShelfWidth/2,-RightTopShelfHeight,ShelfLength*0.8/2+1);
 	rotateX(PI/2);
-	box(RightShelfWidth-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
+	box(RightShelfWidth-2*PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
 	pop();
 	
 	//right topest shelf
 	push();
-	fill(200,200,200);
-	translate(PianoWallWidth/2-RightShelfWidth/2,-RightTopestShelfHeight,ShelfLength/2+1);
+	translate(PianoWallWidth/2-RightShelfWidth/2,-RightTopestShelfHeight,ShelfLength*0.7/2+1);
 	rotateX(PI/2);
-	box(RightShelfWidth-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
+	box(RightShelfWidth-2*PianoShelfMargin,ShelfLength*0.7,ShelfThickness);
 	pop();
 	
-	//top shelf
+	//top left shelf
 	push();
-	fill(200,200,200);
-	translate(0,-TopShelfHeight, ShelfLength/2+1);
+	translate(-PianoWallWidth/2+TopLeftShelfWidth/2+PianoShelfMargin,-TopLeftShelfHeight, TopShelfLength/2+1);
 	rotateX(PI/2);
-	box(TopShelfWidth-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
+	box(TopLeftShelfWidth-2*PianoShelfMargin,TopShelfLength,ShelfThickness);
 	pop();
 	
-	//ceiling shelf
+	//top middle shelf
 	push();
-	fill(200,200,200);
-	translate(0,-CeilingShelfHeight, ShelfLength/2+1);
+	translate(-PianoWallWidth/2+TopLeftShelfWidth+TopMiddleShelfWidth/2,-TopMiddleShelfHeight, TopShelfLength/2+1);
 	rotateX(PI/2);
-	box(TopShelfWidth*0.6-PianoShelfMargin,ShelfLength*0.8,ShelfThickness);
+	box(TopMiddleShelfWidth,TopShelfLength,ShelfThickness);
+	pop();
+	
+	//top right shelf
+	push();
+	translate(PianoWallWidth/2-TopRightShelfWidth/2-PianoShelfMargin,-TopRightShelfHeight, TopShelfLength/2+1);
+	rotateX(PI/2);
+	box(TopRightShelfWidth-2*PianoShelfMargin,TopShelfLength,ShelfThickness);
+	pop();
+	
+	
+}
+
+function drawMetalStrips(){
+	fill(20,20,20);
+	
+	//left vertical stands
+	push();
+	translate(-PianoWallWidth/2+PianoShelfMargin-3/2,-LeftTopShelfHeight/2-LeftBottomShelfHeight/2,ShelfLength);
+	rotateX(PI/2);
+	box(3, 3, LeftTopShelfHeight-LeftBottomShelfHeight+ShelfThickness);
+	pop();
+	
+	push();
+	translate(-PianoWallWidth/2+LeftShelfWidth-PianoShelfMargin+3/2,-LeftTopShelfHeight/2-LeftBottomShelfHeight/2,ShelfLength);
+	rotateX(PI/2);
+	box(3, 3, LeftTopShelfHeight-LeftBottomShelfHeight+ShelfThickness);
+	pop();
+	
+	push();
+	translate(-PianoWallWidth/2+PianoShelfMargin+45,-LeftTopShelfHeight/2-LeftBottomShelfHeight/2,3);
+	rotateX(PI/2);
+	box(3, 3, LeftTopShelfHeight-LeftBottomShelfHeight+ShelfThickness);
+	pop();
+	
+	push();
+	translate(-PianoWallWidth/2+LeftShelfWidth-PianoShelfMargin-45,-LeftTopShelfHeight/2-LeftBottomShelfHeight/2,3);
+	rotateX(PI/2);
+	box(3, 3, LeftTopShelfHeight-LeftBottomShelfHeight+ShelfThickness);
+	pop();
+	
+	//right ladder frame
+	push();
+	translate(PianoWallWidth/2-RightShelfWidth+PianoShelfMargin,-1.5*PianoHeight/2,ShelfLength/1.7);
+	rotateX(PI/2+PI/16);
+	box(3,16,1.5*PianoHeight);
+	pop();
+	
+	push();
+	translate(PianoWallWidth/2-PianoShelfMargin,-1.5*PianoHeight/2,ShelfLength/1.7);
+	rotateX(PI/2+PI/16);
+	box(3,16,1.5*PianoHeight);
+	pop();
+	
+	push();
+	translate(PianoWallWidth/2-RightShelfWidth/2,-3,ShelfLength+8);
+	rotateX(PI/2);
+	box(RightShelfWidth-2*PianoShelfMargin,16,3);
+	pop();
+	
+	push();
+	translate(PianoWallWidth/2-RightShelfWidth/2,-1.5*PianoHeight,8);
+	rotateX(PI/2);
+	box(RightShelfWidth-2*PianoShelfMargin,16,3);
+	pop();
+	
+	//top shelf vertical left
+	push();
+	translate(-PianoWallWidth/2+TopLeftShelfWidth,-TopMiddleShelfHeight, TopShelfLength/2+1);
+	rotateY(PI/2);
+	translate(0,-TopLeftShelfHeight/2+TopMiddleShelfHeight/2,0);
+	box(16,TopLeftShelfHeight-TopMiddleShelfHeight-ShelfThickness,3);
+	pop();
+	
+	//top shelf vertical right
+	push();
+	translate(PianoWallWidth/2-TopRightShelfWidth,-TopMiddleShelfHeight, TopShelfLength/2+1);
+	rotateY(PI/2);
+	translate(0,-TopRightShelfHeight/2+TopMiddleShelfHeight/2,0);
+	box(16,TopRightShelfHeight-TopMiddleShelfHeight-ShelfThickness,3);
 	pop();
 }
